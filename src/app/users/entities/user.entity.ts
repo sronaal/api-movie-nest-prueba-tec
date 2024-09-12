@@ -1,31 +1,31 @@
 import { hash } from "crypto";
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { v4 as uuid} from 'uuid'
+import { BeforeInsert, Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+import * as md5 from 'md5'
 
 @Entity()
 export class User {
 
-    @PrimaryGeneratedColumn()
-    id!: number ;
+    @PrimaryGeneratedColumn("uuid")
 
+    id: string
 
-    @Column()
+    @Column({ nullable: true })
     nombre_completo: string;
 
     @Column()
-    usuario: string;
+    user: string;
 
     @Column()
-    correo: string;
+    email: string;
 
     @Column()
     password: string;
 
 
     @BeforeInsert()
-    hashPassword(){
-        let hashPassword = hash(this.password,2)
-        this.password = hashPassword
+    hashPassword() {
+       let hash_password = md5(this.password)
+       this.password = hash_password
     }
 
 }

@@ -5,10 +5,16 @@ export class CreateAuthDto {
 
     @IsEmail({})
     @IsNotEmpty({message: 'El correo es obligatorio'})
-    correo!: string
+    email!: string
 
 
     @IsNotEmpty({message: 'La contraseña es obligatoria'})
     password!: string
+
+    @IsNotEmpty({ message:'El usuario es os obligatorio'})
+    user:string
+
+
+    nombre_completo : string
 }
 
