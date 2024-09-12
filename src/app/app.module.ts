@@ -10,15 +10,15 @@ import { TypeOrmModule } from '@nestjs/typeorm'
     // Se realiza la configuracín de la base de datos 
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: process.env.db_ip || 'localhost',
-      port: 3306,
-      username:process.env.db_user || 'desarrollo',
-      password:process.env.db_password || 'password',
-      database: process.env.db_name || 'crm',
-      //entities:[Usuario, Observaciones,Proyecto, Rol],
-      autoLoadEntities:true,
-      synchronize:true
+      host: process.env.DATABASE_HOST || 'localhost',
+      port: Number(process.env.DATABASE_PORT) || 3306,
+      username: process.env.DATABASE_USER || 'desarrollo',
+      password: process.env.DATABASE_PASSWORD || 'desarrollo',
+      database: process.env.DATABASE_NAME || 'desarrollo',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true, // Solo en desarrollo
     }),
+    
 
 
     AuthModule, UsersModule, MoviesModule
