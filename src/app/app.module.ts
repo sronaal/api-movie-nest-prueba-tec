@@ -12,8 +12,8 @@ import { TypeOrmModule } from '@nestjs/typeorm'
       type: 'mysql',
       host: process.env.DATABASE_HOST || 'localhost',
       port: Number(process.env.DATABASE_PORT) || 3306,
-      username: process.env.DATABASE_USER || 'desarrollo',
-      password: process.env.DATABASE_PASSWORD || 'desarrollo',
+      username: process.env.DATABASE_USER || 'root',
+      password: process.env.DATABASE_PASSWORD || 'root_password',
       database: process.env.DATABASE_NAME || 'desarrollo',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true, // Solo en desarrollo

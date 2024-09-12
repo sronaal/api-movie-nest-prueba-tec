@@ -10,9 +10,9 @@ services:
       - db
     environment:
       DATABASE_HOST: db
-      DATABASE_PORT: 33060
-      DATABASE_USER: desarrollo
-      DATABASE_PASSWORD: desarrolllo
+      DATABASE_PORT: 3306
+      DATABASE_USER: root
+      DATABASE_PASSWORD: root_password
       DATABASE_NAME: desarrollo
 
   db:
@@ -21,7 +21,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root_password
       MYSQL_USER: desarrollo
-      MYSQL_PASSWORD: desarrolllo
+      MYSQL_PASSWORD: desarrollo
       MYSQL_DATABASE: desarrollo
     ports:
       - "3306:3306"
