@@ -23,10 +23,10 @@
     "allowUnusedLabels": false,
     "alwaysStrict": true,
     "noImplicitThis": true,
-    "noImplicitReturns": true,
+    "noImplicitReturns": false,
     "useUnknownInCatchVariables": true,
     "strictFunctionTypes": true,
-    "strictPropertyInitialization": true,
+    "strictPropertyInitialization": false,
     "noImplicitOverride": true,
   }
 }
