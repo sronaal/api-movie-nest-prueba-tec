@@ -48,7 +48,7 @@ export class MoviesService {
 
         return resolve(data)
       } catch (error) {
-
+        
         return reject(error)
       }
 
