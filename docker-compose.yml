@@ -10,6 +10,7 @@ services:
       - db
     environment:
       DATABASE_HOST: db
+      SECRET: Rl3Ucrr3LVkWU52UDqJAGUpy8sk2Tu6f8b3CrKWsOuTQT0qGJA
       DATABASE_PORT: 3306
       DATABASE_USER: root
       DATABASE_PASSWORD: root_password

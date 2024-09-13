@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -23,12 +23,33 @@ export class UsersController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+   
+    let userUpdate = await this.usersService.findOne(id)
+
+    if(! userUpdate ) return new HttpException(`User Id ${id} not found`, HttpStatus.NOT_FOUND)
+    
+    let update = await this.usersService.update(id, updateUserDto);
+
+    return new HttpException(`User update ${update}`, HttpStatus.OK)
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  async remove(@Param('id') id: string) {
+    
+    try {
+      
+      let findUserDelete = await this.usersService.findOne(id)
+
+      if( !findUserDelete ) return new HttpException(`User Id ${id} not found`, HttpStatus.NOT_FOUND )
+
+      let user = await this.usersService.remove(id, findUserDelete);
+      
+      return new HttpException(`Usuario eliminado ${user}`, HttpStatus.ACCEPTED) 
+
+    } catch (error) {
+      
+      return new HttpException(`Error eliminacion usuario ${error}`, HttpStatus.BAD_REQUEST)
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,8 +10,8 @@ export class UsersService {
 
   constructor(
     @InjectRepository(User)
-    private userRepository : Repository<User>
-  ){}
+    private userRepository: Repository<User>
+  ) { }
 
 
   create(createUserDto: CreateUserDto) {
@@ -19,30 +19,63 @@ export class UsersService {
   }
 
   findAll() {
-    return this.userRepository.find()
+    return this.userRepository.find({
+      select: {
+        id: true,
+        email: true,
+        nombre_completo: true,
+        user: true,
+        password: false,
+        isDeleted: false
+      },
+      where: { isDeleted: false }
+    })
   }
 
-  findByEmail(email: string){
+  findByEmail(email: string) {
 
-    return this.userRepository.findOne({ where: { email } })
+    return this.userRepository.findOne({ where: { email, isDeleted: false } })
   }
 
-  findByUser(user: string){
+  findByUser(user: string) {
 
-    return this.userRepository.findOne({ where :  { user } })
+    return this.userRepository.findOne({ where: { user } })
   }
 
   findOne(id: string) {
 
-    return this.userRepository.findOne({ where : { id } })
+    return this.userRepository.findOne({ where: { id, isDeleted: false} })
+
+  }
+
+  update(id: string, updateUserDto: UpdateUserDto) {
+  
     
+    return this.userRepository.update(id,updateUserDto)
+
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+  remove(id: string, userDelete: User) {
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+    return new Promise<User>(async (resolve, reject) => {
+      
+      try {
+
+        userDelete.isDeleted = true
+        let userInactive = await this.userRepository.save(userDelete)
+        
+        return resolve(userInactive)
+        
+      } catch (error) {
+        console.log(error)
+        return reject(error)
+      }
+
+
+    })
+
+
+
+
   }
 }

@@ -3,12 +3,16 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { MoviesModule } from './movies/movies.module';
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { ConfigModule } from '@nestjs/config'
 import { User } from "./users/entities/user.entity";
 
 @Module({
   imports: [
 
-    // Se realiza la configuracín de la base de datos 
+    ConfigModule.forRoot({
+      isGlobal: true
+    }),
+
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DATABASE_HOST || 'localhost',
@@ -17,12 +21,12 @@ import { User } from "./users/entities/user.entity";
       password: process.env.DATABASE_PASSWORD || 'root_password',
       database: process.env.DATABASE_NAME || 'desarrollo',
       entities: [User],
-      synchronize: true, // Solo en desarrollo
+      synchronize: true, 
     }),
     
+    TypeOrmModule.forFeature([User]),
 
-
-    AuthModule, UsersModule, MoviesModule
+    AuthModule, UsersModule, MoviesModule, 
   ],
 
   controllers: [],
