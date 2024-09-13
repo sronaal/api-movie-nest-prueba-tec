@@ -14,7 +14,7 @@ export class MoviesController {
 
   @Get()
   findAll() {
-    return this.moviesService.findAll();
+    return this.moviesService.getMoviesAPI();
   }
 
   @Get(':id')

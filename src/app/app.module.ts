@@ -5,6 +5,7 @@ import { MoviesModule } from './movies/movies.module';
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfigModule } from '@nestjs/config'
 import { User } from "./users/entities/user.entity";
+import { CacheModule } from "@nestjs/cache-manager";
 
 @Module({
   imports: [
@@ -12,6 +13,8 @@ import { User } from "./users/entities/user.entity";
     ConfigModule.forRoot({
       isGlobal: true
     }),
+
+    CacheModule.register({ isGlobal:  true }),
 
     TypeOrmModule.forRoot({
       type: 'mysql',
