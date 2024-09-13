@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
@@ -13,8 +13,18 @@ export class MoviesController {
   }
 
   @Get()
-  findAll() {
-    return this.moviesService.getMoviesAPI();
+  async findAll() {
+      try {
+        console.log("HOLA")
+        let movies = await this.moviesService.getMoviesAPI();
+        console.log("OK")
+        return new HttpException(movies, HttpStatus.OK)
+      } catch (error) {
+        
+        console.log(error)
+
+        return new HttpException('ERROR',HttpStatus.BAD_REQUEST)
+      }
   }
 
   @Get(':id')

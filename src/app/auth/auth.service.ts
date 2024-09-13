@@ -26,6 +26,7 @@ export class AuthService {
         })
     }
 
+    
     async generarJWTAuth(data: AuthSucessDTO) {
 
         return this.jwtService.signAsync(data)
@@ -38,6 +39,8 @@ export class AuthService {
 
 
     }
+
+
 
     validarContraseña(password: string,hash_password: string){
 
