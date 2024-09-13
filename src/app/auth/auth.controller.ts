@@ -4,6 +4,7 @@ import { CreateAuthDto } from './dto/create-auth.dto';
 import { loginAuthDTO } from './dto/login-auth.dto'
 import { AuthSucessDTO } from './interfaces/AuthSuccess.interface';
 import { UsersService } from '../users/users.service';
+import { ApiOperation } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -12,6 +13,21 @@ export class AuthController {
     private readonly userService: UsersService
   ) { }
 
+
+
+
+  /**
+   * 
+   * @Controlador HTTP Para registro de usuarios
+   * @param createAuth {email: '', password: ''}
+   * @returns http_exeception
+   */
+
+  @ApiOperation(
+    {
+      summary: 'endpoint creacion usuario',
+    }
+  )
   @Post('signup')
   async signUP(@Body() createAuth: CreateAuthDto) {
 
@@ -43,6 +59,10 @@ export class AuthController {
     }
   }
 
+
+  @ApiOperation({
+    summary: 'endpoint iniciar sesión'
+  })
   @Post('login')
   async login(@Body() loginAuth: loginAuthDTO) {
 

@@ -5,7 +5,7 @@ import { UpdateMovieDto } from './dto/update-movie.dto';
 
 @Controller('movies')
 export class MoviesController {
-  constructor(private readonly moviesService: MoviesService) {}
+  constructor(private readonly moviesService: MoviesService) { }
 
   @Post()
   create(@Body() createMovieDto: CreateMovieDto) {
@@ -14,22 +14,37 @@ export class MoviesController {
 
   @Get()
   async findAll() {
-      try {
-        console.log("HOLA")
-        let movies = await this.moviesService.getMoviesAPI();
-        console.log("OK")
-        return new HttpException(movies, HttpStatus.OK)
-      } catch (error) {
-        
-        console.log(error)
+    try {
 
-        return new HttpException('ERROR',HttpStatus.BAD_REQUEST)
-      }
+      let movies = await this.moviesService.getMoviesAPI();
+      return new HttpException(movies, HttpStatus.OK)
+
+    } catch (error) {
+
+      console.log(error)
+
+      return new HttpException('ERROR', HttpStatus.BAD_REQUEST)
+    }
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.moviesService.findOne(+id);
+  findOne(@Param('id') id: number) {
+
+    try {
+
+      let movieFind = this.moviesService.findOne(id)
+
+      if (!movieFind) return new HttpException(`Movie with id ${id}  not found `, HttpStatus.NOT_FOUND)
+      
+      return new HttpException(movieFind, HttpStatus.OK)
+
+      
+    } catch (error) {
+      
+      console.log(error)
+      return new HttpException(`Error ${error}`, HttpStatus.BAD_REQUEST)
+    }
+
   }
 
   @Patch(':id')

@@ -26,7 +26,7 @@ export class UsersService {
         nombre_completo: true,
         user: true,
         password: false,
-        isDeleted: false
+        isDeleted: true
       },
       where: { isDeleted: false }
     })
@@ -44,28 +44,41 @@ export class UsersService {
 
   findOne(id: string) {
 
-    return this.userRepository.findOne({ where: { id, isDeleted: false} })
+    return this.userRepository.findOne({
+      select: {
+        id: true,
+        email: true,
+        nombre_completo: true,
+        user: true,
+        password: false,
+        isDeleted: true
+      },
+
+      where: { id, isDeleted: false }
+    }
+
+    )
 
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
-  
-    
-    return this.userRepository.update(id,updateUserDto)
+
+
+    return this.userRepository.update(id, updateUserDto)
 
   }
 
   remove(id: string, userDelete: User) {
 
     return new Promise<User>(async (resolve, reject) => {
-      
+
       try {
 
         userDelete.isDeleted = true
         let userInactive = await this.userRepository.save(userDelete)
-        
+
         return resolve(userInactive)
-        
+
       } catch (error) {
         console.log(error)
         return reject(error)
