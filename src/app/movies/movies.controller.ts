@@ -1,18 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, Header } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { movieResponse, MoviesInterface, Result } from './interfaces/movies.interface';
+import { ApiOperation } from '@nestjs/swagger';
 
 @Controller('movies')
 export class MoviesController {
   constructor(private readonly moviesService: MoviesService) { }
 
-  @Post()
-  create(@Body() createMovieDto: CreateMovieDto) {
-    return this.moviesService.create(createMovieDto);
-  }
 
+
+
+
+  @ApiOperation({
+    summary: 'endpoint obtener peliculas '
+  })
   @Get()
   async findAll() {
     try {
@@ -28,6 +31,10 @@ export class MoviesController {
     }
   }
 
+
+  @ApiOperation({
+    summary: 'endpoint obtener pelicula por id'
+  })
   @Get(':id')
   async findOne(@Param('id') id: number) {
 
@@ -48,13 +55,9 @@ export class MoviesController {
 
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMovieDto: UpdateMovieDto) {
-    return this.moviesService.update(+id, updateMovieDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.moviesService.remove(+id);
+  
+  @Patch('favorities/add/:id')
+  async addFavoriteMovie(@Param('id') id: number, ) {
+    
   }
 }

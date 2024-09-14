@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiOperation } from '@nestjs/swagger';
+import { AuthGuard } from '../auth/guards/auth/auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -25,6 +26,9 @@ export class UsersController {
   @ApiOperation({
     summary: 'Buscar usuario activo por id'
   })
+
+
+  @UseGuards(AuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: string) {
 
@@ -44,7 +48,7 @@ export class UsersController {
 
 
 
-
+  @UseGuards(AuthGuard)
   @Patch(':id') 
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
 
@@ -58,9 +62,12 @@ export class UsersController {
   }
 
 
+  @UseGuards(AuthGuard)
   @ApiOperation({
     summary: 'Eliminacion de usuario sin eliminar de base de datos desactiva el usuario'
   })
+
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: string) {
 
