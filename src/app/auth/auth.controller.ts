@@ -5,6 +5,7 @@ import { loginAuthDTO } from './dto/login-auth.dto'
 import { AuthSucessDTO } from './interfaces/AuthSuccess.interface';
 import { UsersService } from '../users/users.service';
 import { ApiOperation } from '@nestjs/swagger';
+import { ChangePassword } from './dto/change-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -96,9 +97,12 @@ export class AuthController {
     }
   }
 
+  
   @Put('change-password')
-  async changePassword(){
-    
+  async changePassword(@Body() changePassword: ChangePassword ){
+
+
+
   }
 
 

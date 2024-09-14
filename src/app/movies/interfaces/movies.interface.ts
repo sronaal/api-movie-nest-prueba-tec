@@ -22,3 +22,13 @@ export interface Result {
     vote_average:      number;
     vote_count:        number;
 }
+
+
+export interface movieResponse {
+
+    name: string
+    genero: number[]
+    rating : number
+    fecha_estreno : Date;
+    resumen : string
+}

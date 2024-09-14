@@ -16,6 +16,8 @@ export class UsersController {
   })
   @Get()
   findAll() {
+
+
     return this.usersService.findAll();
   }
 
@@ -70,7 +72,7 @@ export class UsersController {
 
       let user = await this.usersService.remove(id, findUserDelete);
 
-      return new HttpException(`Usuario eliminado ${user}`, HttpStatus.ACCEPTED)
+      return new HttpException(`Usuario eliminado ${user.id}`, HttpStatus.ACCEPTED)
 
     } catch (error) {
 

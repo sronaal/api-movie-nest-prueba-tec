@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpS
 import { MoviesService } from './movies.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
+import { movieResponse, MoviesInterface, Result } from './interfaces/movies.interface';
 
 @Controller('movies')
 export class MoviesController {
@@ -28,21 +29,21 @@ export class MoviesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
+  async findOne(@Param('id') id: number) {
 
     try {
 
-      let movieFind = this.moviesService.findOne(id)
+      let movieFind : movieResponse  = await  this.moviesService.findOne(id)
+      
 
-      if (!movieFind) return new HttpException(`Movie with id ${id}  not found `, HttpStatus.NOT_FOUND)
       
       return new HttpException(movieFind, HttpStatus.OK)
 
-      
-    } catch (error) {
-      
+
+    } catch (error: any) {
+
       console.log(error)
-      return new HttpException(`Error ${error}`, HttpStatus.BAD_REQUEST)
+      return new HttpException(`${error}`, error.HttpStatus)
     }
 
   }

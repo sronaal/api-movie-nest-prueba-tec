@@ -1,11 +1,12 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UpdateMovieDto } from './dto/update-movie.dto';
 import { HttpService } from '@nestjs/axios';
 import { Cache } from 'cache-manager'
-import { MoviesInterface, Result } from './interfaces/movies.interface';
+import { movieResponse, MoviesInterface, Result } from './interfaces/movies.interface';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 
 
 @Injectable()
@@ -71,23 +72,50 @@ export class MoviesService {
 
   findOne(id: number) {
 
-    return new Promise<MoviesInterface | Result>(async (resolve, reject) => {
+
+    return new Promise<movieResponse>(async (resolve, reject) => {
 
       try {
 
-        const movieCache = await this.cacheManager.get<MoviesInterface>('movieid')
+        const movieCache = await this.cacheManager.get<Result>('movieid')
 
-        if (movieCache) return resolve(movieCache)
+        if (movieCache) {
 
-        let { data } = await this.httpService.axiosRef.get<Result>('')
+          let movie: movieResponse = {
+            "name": movieCache.title,
+            "genero": movieCache.genre_ids,
+            "rating": movieCache.popularity,
+            "fecha_estreno": movieCache.release_date,
+            "resumen": movieCache.overview
+          }
+
+          return resolve(movie)
+        }
+
+
+        let { data } = await this.httpService.axiosRef.get<Result>(`${this.url_api}movie/${id}`, this.config_http)
 
         await this.cacheManager.set('movieid', data, 1000)
 
-        return resolve(data)
-      
-      } catch (error) {
+        let movie: movieResponse = {
+
+          "name": data.title,
+          "genero": data.genre_ids,
+          "rating": data.popularity,
+          "fecha_estreno": data.release_date,
+          "resumen": data.overview
+        }
+
+        return resolve(movie)
+
+      } catch (error: any) {
+
+        if (error.status === 404) return reject(new HttpException(`movie with id ${id} not found`, HttpStatus.NOT_FOUND))
+
+        if (error.status === 401) return reject(new HttpException(`api movie not found `, HttpStatus.UNAUTHORIZED))
 
         return reject(error)
+
       }
 
     })
